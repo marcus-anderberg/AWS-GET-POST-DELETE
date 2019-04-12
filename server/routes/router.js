@@ -6,6 +6,7 @@ const fileType = require("file-type");
 const bluebird = require("bluebird");
 const multiparty = require("multiparty");
 require("dotenv").config();
+const cleanFilename = require('./cleanFilename')
 
 console.log('aws key', process.env.AWS_ACCESS_KEY_ID);
 
@@ -26,28 +27,64 @@ const uploadFile = (buffer, name, type) => {
   const params = {
     ACL: "public-read",
     Body: buffer,
-    Bucket: "endinmind",
+    Bucket: "bazookalip",
     ContentType: type.mime,
     Key: `${name}.${type.ext}`
   };
-  console.log(params);
+  // console.log(params);
   
   return s3.upload(params).promise();
 };
 
+ var params = {
+   Bucket: "bazookalip",
+   MaxKeys: 10
+ };
+
+
+ app.get("/aws", (request, response) => {
+   console.log('hi were in the get route kthx');
+
+  const objectsArray = s3.listObjects(params, function(err, data) {
+      if (err) {
+        console.log(err, err.stack);
+        response.sendStatus(500);
+      }
+      // an error occurred
+      else {
+        console.log('raw data', data.Contents); // successful response
+
+        const siftedArray = data.Contents.map(obj => {
+
+          return {
+            key: obj.Key,
+            eTag: obj.ETag,
+          }
+        })
+
+        response.send({ siftedArray });
+      }
+    });
+ })
+
+ 
 // Define POST route
 app.post("/test-upload", (request, response) => {
     console.log('is this working?');
+  
     
   const form = new multiparty.Form();
   form.parse(request, async (error, fields, files) => {
+    console.log(files);
+    
     if (error) throw new Error(error);
     try {
       const path = files.file[0].path;
       const buffer = fs.readFileSync(path);
       const type = fileType(buffer);
       const timestamp = Date.now().toString();
-      const fileName = `bucketFolder/${timestamp}-lg`;
+      const newFilename = cleanFilename(files.file[0].originalFilename);
+      const fileName = `Public/${newFilename}_${timestamp}`;
       const data = await uploadFile(buffer, fileName, type);
       return response.status(200).send(data);
     } catch (error) {

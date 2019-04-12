@@ -21,6 +21,7 @@ class FileUpload extends Component {
       })
       .then(response => {
         // handle your response;
+        alert('file uploaded successfully')
       })
       .catch(error => {
         // handle your error
