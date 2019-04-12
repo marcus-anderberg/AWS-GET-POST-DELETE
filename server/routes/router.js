@@ -37,7 +37,7 @@ const uploadFile = (buffer, name, type) => {
 };
 
  var params = {
-   Bucket: "bazookalip",
+   Bucket: process.env.S3_BUCKET,
    MaxKeys: 10
  };
 
