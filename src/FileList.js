@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
+import FileDisplay from "./fileDisplay";
 
 class FileList extends Component {
+
+  state = {
+    files: [],
+  }
 
   componentDidMount() {
     this.getFiles();
@@ -11,7 +16,8 @@ class FileList extends Component {
     console.log('hi im gettinr files ok');
     axios.get('aws')
     .then(response => {
-      console.log(response);
+      console.log(response.data.siftedArray);
+      this.setState({files: response.data.siftedArray});
     })
 
     .catch(error => {
@@ -22,7 +28,8 @@ class FileList extends Component {
   render() {
     return (
       <div>
-      
+        {this.state.files.map((file, index) => 
+          <FileDisplay myFile={file} key={index}/>)}
       </div>
     );
   }

@@ -36,7 +36,7 @@ const uploadFile = (buffer, name, type) => {
   return s3.upload(params).promise();
 };
 
-console.log('my bucket is', process.env.listObjects);
+console.log('my bucket is', process.env.S3_BUCKET);
 
  var params = {
    Bucket: process.env.S3_BUCKET,
@@ -61,6 +61,8 @@ console.log('my bucket is', process.env.listObjects);
           return {
             key: obj.Key,
             eTag: obj.ETag,
+            size: obj.Size,
+            storageClass: obj.StorageClass,
           }
         })
 
