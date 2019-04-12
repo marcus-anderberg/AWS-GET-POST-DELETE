@@ -8,7 +8,7 @@ const multiparty = require("multiparty");
 require("dotenv").config();
 const cleanFilename = require('./cleanFilename')
 
-console.log('aws key', process.env.AWS_ACCESS_KEY_ID);
+
 
 // configure the keys for accessing AWS
 AWS.config.update({
@@ -31,7 +31,7 @@ const uploadFile = (buffer, name, type) => {
     ContentType: type.mime,
     Key: `${name}.${type.ext}`
   };
-  // console.log(params);
+ console.log(params);
   
   return s3.upload(params).promise();
 };
