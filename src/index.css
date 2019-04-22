@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
 }
 
 code {
@@ -16,8 +17,19 @@ code {
 
 button {
   width: 100px;
-  height: 30px;
+  height: 20px;
   border-radius: 50px;
+  margin: 10px;
+  outline: none;
+}
+/* 
+input {
+  width: 100px;
+  height: 30px;
   margin: 100px;
   outline: none;
+} */
+
+ul {
+  list-style-type: none;
 }

@@ -57,13 +57,15 @@ console.log('my bucket is', process.env.S3_BUCKET);
         console.log('raw data', data.Contents); // successful response
 
         const siftedArray = data.Contents.map(obj => {
-
+          let params = {Bucket: process.env.S3_BUCKET, Key: obj.Key};
+          let url = s3.getSignedUrl(`getObject`, params);
           return {
             key: obj.Key,
             eTag: obj.ETag,
             size: obj.Size,
             storageClass: obj.StorageClass,
-          }
+            signedURL: url
+          } 
         })
 
         response.send({ siftedArray });
@@ -79,7 +81,7 @@ app.post("/test-upload", (request, response) => {
     
   const form = new multiparty.Form();
   form.parse(request, async (error, fields, files) => {
-    console.log(files);
+    // console.log(files);
     
     if (error) throw new Error(error);
     try {
@@ -97,6 +99,25 @@ app.post("/test-upload", (request, response) => {
     }
   });
 });
+
+
+
+app.delete("/:Key", (req, res) => {
+  console.log("/ DELETE request was hit");
+  console.log("req.params", req.params);
+  pool
+    .query(`  `, [req.params.id])
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(error => {
+      console.log("there was an error on the delete query", error);
+      res.sendStatus(500);
+    });
+});
+
+
+
 
 app.listen(process.env.PORT || 9000);
 console.log("Server up and running...");

@@ -21,7 +21,7 @@ class FileUpload extends Component {
       })
       .then(response => {
         // handle your response;
-        alert('file uploaded successfully')
+        alert("file uploaded successfully");
       })
       .catch(error => {
         // handle your error
@@ -31,6 +31,11 @@ class FileUpload extends Component {
   handleFileUpload = event => {
     this.setState({ file: event.target.files });
   };
+
+
+
+
+
 
   render() {
     return (

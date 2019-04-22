@@ -8,9 +8,9 @@ import FileList from './FileList';
 class App extends Component {
   render() {
     return (
-      <div >
-        <FileList />
+      <div>
         <Upload />
+        <FileList />
       </div>
     );
   }
